@@ -144,6 +144,8 @@ public class WebShopTests {
             //Fill new address
             driver.findElement(By.id("BillingNewAddress_CountryId")).click();
             new Select(driver.findElement(By.id("BillingNewAddress_CountryId"))).selectByVisibleText("United States");
+            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+                By.cssSelector("#BillingNewAddress_StateProvinceId option"), 1));
             driver.findElement(By.id("BillingNewAddress_StateProvinceId")).click();
             new Select(driver.findElement(By.id("BillingNewAddress_StateProvinceId"))).selectByIndex(1);
             driver.findElement(By.id("BillingNewAddress_City")).sendKeys("Test City");

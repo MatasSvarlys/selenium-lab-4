@@ -22,10 +22,10 @@ public class WebShopTests {
     private WebDriver driver;
     private WebDriverWait wait;
     private static final String BASE_URL = "https://demowebshop.tricentis.com/";
-    private static final String EMAIL = "user_" + UUID.randomUUID().toString().substring(0, 8) + "@example.com";
     private static final String PASSWORD = "Password123";
+    private String EMAIL;
     
-    public static void createNewUser() {
+    public static void createNewUser(String email) {
         WebDriver driverSetup = new ChromeDriver();
         try {
             WebDriverWait waitSetup = new WebDriverWait(driverSetup, Duration.ofSeconds(10));
@@ -39,7 +39,7 @@ public class WebShopTests {
             driverSetup.findElement(By.id("gender-male")).click();
             driverSetup.findElement(By.id("FirstName")).sendKeys("John");
             driverSetup.findElement(By.id("LastName")).sendKeys("Doe");
-            driverSetup.findElement(By.id("Email")).sendKeys(EMAIL);
+            driverSetup.findElement(By.id("Email")).sendKeys(email);
             driverSetup.findElement(By.id("Password")).sendKeys(PASSWORD);
             driverSetup.findElement(By.id("ConfirmPassword")).sendKeys(PASSWORD);
             
@@ -47,19 +47,20 @@ public class WebShopTests {
             
             //Wait for registration to complete
             waitSetup.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//div[@class='result' and contains(text(), 'completed')]")));
-            
-            driverSetup.findElement(By.xpath("//input[@value='Continue']")).click();
-            
-            System.out.println("User created successfully: " + EMAIL);
-        } finally {
-            driverSetup.quit();
+                By.xpath("//div[@class='result' and contains(text(), 'completed')]")));
+                
+                driverSetup.findElement(By.xpath("//input[@value='Continue']")).click();
+                
+                System.out.println("User created successfully: " + email);
+            } finally {
+                driverSetup.quit();
+            }
         }
-    }
-    
-    @Before
-    public void setUp() {
-        createNewUser();
+        
+        @Before
+        public void setUp() {
+        this.EMAIL = "user_" + UUID.randomUUID().toString().substring(0, 8) + "@example.com";
+        createNewUser(this.EMAIL);
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
